@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  web_crawler:
+    build:
+      dockerfile: dev-Dockerfile
+      context: .
+    environment:
+      ENGINE: postgresql+pg8000
+      DB_USER_NAME: DB_USER
+      DB_PASSWORD: DB_PASSWORD
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: pastebin_db
+      DB_ECHO: "true"
+    networks:
+      - wbc_network
+    links:
+      - postgres
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: DB_USER
+      POSTGRES_PASSWORD: DB_PASSWORD
+      POSTGRES_DB: pastebin_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - .tests/sql_create_db/create_db.sql:/docker-entrypoint-initdb.d/init.sql
+
+    ports:
+      - "5432:5432"
+    networks:
+      - wbc_network
+
+
+networks:
+  wbc_network:

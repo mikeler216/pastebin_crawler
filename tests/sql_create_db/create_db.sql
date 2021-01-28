@@ -1,0 +1,3 @@
+
+DROP DATABASE IF EXISTS pastebin_db;
+CREATE DATABASE pastebin_db;

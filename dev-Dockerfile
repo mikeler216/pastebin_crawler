@@ -1,0 +1,9 @@
+FROM python:3.8.7-slim-buster
+
+COPY requirements.txt /
+
+COPY dev-requirements.txt /
+
+RUN pip3 install -r /dev-requirements.txt
+
+COPY . /app
