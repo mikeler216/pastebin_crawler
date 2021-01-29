@@ -30,13 +30,11 @@ def db_session() -> Session:
         session.commit()
 
 
-@pytest.fixture(scope="function")
-def faker() -> Faker:
-    return Faker()
-
-
-@pytest.fixture(scope="function")
-def fake_post_data(faker) -> FakePostData:
+@pytest.fixture(
+    scope="function",
+)
+def fake_post_data() -> FakePostData:
+    faker = Faker()
     return FakePostData(
         fake_author=faker.name(),
         fake_post_date=faker.date_time(),
@@ -60,4 +58,6 @@ def random_post(fake_post_data, db_session) -> Post:
         commit=True,
     )
 
-    return _post
+    yield _post
+
+    db_session.query(Post).delete()

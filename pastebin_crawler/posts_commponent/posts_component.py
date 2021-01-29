@@ -30,9 +30,13 @@ class PostsComponent(BaseComponent):
         author: str,
         post_text: str,
         post_date: datetime,
+        flush: bool = False,
+        commit: bool = False,
     ) -> Post:
         """
 
+        :param commit:
+        :param flush:
         :param pastebin_id:
         :param author:
         :param post_text:
@@ -56,6 +60,8 @@ class PostsComponent(BaseComponent):
             author=_post.author,
             post_text=_post.post_text,
             post_date=_post.post_date,
+            flush=flush,
+            commit=commit,
         )
 
     @staticmethod
