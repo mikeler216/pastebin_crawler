@@ -16,6 +16,7 @@ class PostsRepository(RepositoryBase):
     def create_post(
         self,
         pastebin_id: str,
+        title: str,
         author: str,
         post_text: str,
         post_date: datetime,
@@ -24,6 +25,8 @@ class PostsRepository(RepositoryBase):
     ) -> Post:
         """
 
+        :param validate_exists:
+        :param title:
         :param commit:
         :param flush:
         :param pastebin_id:
@@ -37,6 +40,7 @@ class PostsRepository(RepositoryBase):
             author=author,
             post_text=post_text,
             post_date=post_date,
+            title=title,
         )
         return self._add_commit_or_flush_model(
             model=_post, commit=commit, flush=flush

@@ -12,6 +12,7 @@ class BaseSchema(BaseModel):
 
 class PostSchemaBase(BaseModel):
     pastebin_id: str
+    title: str
     author: str
     post_text: str
     post_date: datetime

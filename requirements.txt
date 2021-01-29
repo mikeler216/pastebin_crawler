@@ -1,10 +1,10 @@
-requests==2.25.1
-SQLAlchemy==1.3.22
-pydantic==1.7.3
+beautifulsoup4==4.9.3
 # https://stackoverflow.com/questions/64519570/sqlalchemy-orm-call-fails-with-typeerror-expected-bytes-str-found
 # plus psycopg2 have no M1 mac version sorry
-pg8000<=1.16.5
-lxml
-pyquery
-beautifulsoup4
-sqlalchemy_utils
+pg8000==1.16.5
+pydantic==1.7.3
+python-dateutil==2.8.1
+requests==2.25.1
+sqlalchemy==1.3.22
+loguru==0.5.3
+apscheduler==3.7.0

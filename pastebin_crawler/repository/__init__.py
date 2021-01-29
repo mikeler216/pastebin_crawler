@@ -4,7 +4,6 @@
 from typing import Optional, Type
 
 from sqlalchemy.orm import Session
-from sqlalchemy_utils import database_exists, create_database
 
 from pastebin_crawler.core.pastebin_crawler_models import DBSession, Base
 

@@ -3,7 +3,6 @@ from sqlalchemy.orm import sessionmaker
 
 from pastebin_crawler.settings.config import Config
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
-from sqlalchemy_utils import database_exists, create_database
 
 config: Config = Config()
 engine = create_engine(
@@ -27,6 +26,7 @@ class Post(Base):
     author = Column(VARCHAR(100), nullable=True)
     post_text = Column(TEXT(), nullable=False)
     post_date = Column(TIMESTAMP())
+    title = Column(VARCHAR(250), nullable=False)
 
 
 def create_deals_table(engine) -> None:

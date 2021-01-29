@@ -1,20 +1,14 @@
-# This is a sample Python script.
+import uuid
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-from pastebin_crawler.core.pastebin_crawler_models import (
-    engine,
-    create_deals_table,
-)
+from apscheduler.schedulers.background import BlockingScheduler
 
+from pastebin_crawler.helpers.logger import Logger
+from pastebin_crawler.workers.pastebin_worker import PasteBinWorker
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f"Hi, {name}")  # Press ⌘F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == "__main__":
-    create_deals_table(engine)
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    with Logger().logger.contextualize(task_id=str(uuid.uuid4())):
+        background_scheduler = BlockingScheduler()
+        background_scheduler.add_job(
+            PasteBinWorker().run, "interval", seconds=60 * 2
+        )
+        background_scheduler.start()
