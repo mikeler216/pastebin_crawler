@@ -32,7 +32,7 @@ class PasteBinArchiveService(BaseCrawlerService):
                 continue
             try:
                 _urls.append(_url)
-            except (AttributeError, KeyError):
-                # todo log
+            except (AttributeError, KeyError) as e:
+                self._logger.error(exception=e, func="get_latest_posts_urls")
                 continue
         return _urls

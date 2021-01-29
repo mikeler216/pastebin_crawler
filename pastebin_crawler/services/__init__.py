@@ -4,7 +4,7 @@ import requests
 from requests import Response
 
 from pastebin_crawler.helpers.exceptions_helper import GateWayError
-from pastebin_crawler.helpers.logger import info_logging
+from pastebin_crawler.helpers.logger import info_logging, Logger
 
 
 class BaseCrawlerService(object):
@@ -16,6 +16,7 @@ class BaseCrawlerService(object):
         """
         self._resource_url: str = resource_url
         self._base_url: str = base_url
+        self._logger = Logger()
 
     @property
     def base_url(self) -> str:
@@ -33,14 +34,15 @@ class BaseCrawlerService(object):
         """
         return parse.urljoin(base=self._base_url, url=self._resource_url)
 
-    def handle_response(self, response: Response) -> Response:
+    @staticmethod
+    def handle_response(response: Response) -> Response:
         """
 
         :param response:
         :return:
         """
         if _status_code := response.status_code != 200:
-            GateWayError(
+            raise GateWayError(
                 status_code=_status_code, message=f"{response.content}"
             )
         return response

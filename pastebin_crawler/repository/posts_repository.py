@@ -25,7 +25,6 @@ class PostsRepository(RepositoryBase):
     ) -> Post:
         """
 
-        :param validate_exists:
         :param title:
         :param commit:
         :param flush:

@@ -35,9 +35,9 @@ class Post(Base):
     )
 
 
-def create_tables(engine) -> None:
+def create_tables(db_engine) -> None:
     """"""
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all(db_engine)
     return None
 
 

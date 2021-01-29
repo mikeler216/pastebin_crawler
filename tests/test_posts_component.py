@@ -36,8 +36,8 @@ def test_create_user_failed(
             author=_author,
             title=_title,
             post_text=_post_text,
-            post_date=["", "sadasasd", "sadsadas"],
-        )  # noqa
+            post_date=["", "sadasasd", "sadsadas"],  # noqa
+        )
 
     # test duplicate post
     with pytest.raises(PostExistsError):
