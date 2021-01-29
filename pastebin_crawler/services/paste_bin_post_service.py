@@ -52,7 +52,7 @@ class PasteBinPostService(BaseCrawlerService):
                 .find("a")
                 .attrs["href"]
             )
-        return self._author
+        return str(self._author)
 
     @property
     def title(self) -> str:
@@ -60,7 +60,7 @@ class PasteBinPostService(BaseCrawlerService):
             self._title = self.html_parser.body.find(
                 "div", {"class": PostDivName.title}
             ).text
-        return self._title
+        return str(self._title)
 
     @property
     def post_text(self) -> str:
@@ -68,7 +68,7 @@ class PasteBinPostService(BaseCrawlerService):
             self._post_text = self.html_parser.body.find(
                 "textarea", {"class": PostDivName.post_text}
             ).text
-        return self._post_text
+        return str(self._post_text)
 
     @property
     def post_date(self) -> datetime:

@@ -4,9 +4,13 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from pastebin_crawler.core.pastebin_crawler_models import Post
-from pastebin_crawler.helpers import remove_trailing_slash_by_delimiter
+from pastebin_crawler.helpers import (
+    remove_trailing_slash_by_delimiter,
+    remove_beginning_slash_from_str,
+)
+from pastebin_crawler.helpers.constans import ValuesToNormalize
 from pastebin_crawler.helpers.exceptions_helper import PostExistsError
-from pastebin_crawler.helpers.logger import info_logging
+from pastebin_crawler.helpers.logger import info_logging, debug_logging
 from pastebin_crawler.helpers.schemas import PostSchemaBase
 from pastebin_crawler.posts_commponent import BaseComponent
 
@@ -50,6 +54,10 @@ class PostsComponent(BaseComponent):
         :param post_date:
         :return:
         """
+
+        pastebin_id = remove_beginning_slash_from_str(pastebin_id)
+        author = self.normalize_input(author)
+        title = self.normalize_input(title)
         _post: PostSchemaBase = PostSchemaBase(
             pastebin_id=pastebin_id,
             author=author,
@@ -85,3 +93,17 @@ class PostsComponent(BaseComponent):
         return remove_trailing_slash_by_delimiter(
             text=post_text, delimiter="\r\n"
         )
+
+    @debug_logging
+    def normalize_input(self, input_text: str) -> str:
+        """
+
+        :param input_text:
+        :return:
+        """
+        input_text = input_text.strip()
+        if input_text.startswith("/u/"):
+            input_text = input_text[3:]
+        if input_text in ValuesToNormalize.ALL_VALUES:
+            input_text = ""
+        return input_text

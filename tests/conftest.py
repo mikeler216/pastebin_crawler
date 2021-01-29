@@ -5,30 +5,31 @@ from faker import Faker
 from sqlalchemy.orm import Session
 
 from pastebin_crawler.core.pastebin_crawler_models import (
-    create_deals_table,
-    engine,
     DBSession,
     Post,
+    create_tables_for_demo_or_test,
 )
-from pastebin_crawler.helpers.logger import Logger
 from pastebin_crawler.helpers.typings_helper import FakePostData
 from pastebin_crawler.repository.posts_repository import PostsRepository
 
 
 @pytest.fixture(scope="session")
-def logger_context():
-    with Logger().logger.contextualize(task_id=str(uuid.uuid4())):
-        yield
+def wait_for_table():
+    """
+    compose takes some time to create a table let's wait for it a bit
+    :return:
+    """
+    create_tables_for_demo_or_test()
+    yield
 
 
 @pytest.fixture(scope="module")
-def db_session(logger_context) -> Session:
+def db_session(wait_for_table) -> Session:
     """
     Create tables and remove them at end of test
     THIS SHOULD NOT BE RUN ON REAL DB EVER only through a reusable compose test!!!
     :return: db session object
     """
-    create_deals_table(engine)
     session = DBSession()
     try:
         yield session
@@ -40,7 +41,7 @@ def db_session(logger_context) -> Session:
 @pytest.fixture(
     scope="function",
 )
-def fake_post_data(logger_context) -> FakePostData:
+def fake_post_data() -> FakePostData:
     faker = Faker()
     return FakePostData(
         fake_author=faker.name(),
@@ -54,7 +55,7 @@ def fake_post_data(logger_context) -> FakePostData:
 
 
 @pytest.fixture(scope="function")
-def random_post(fake_post_data, db_session, logger_context) -> Post:
+def random_post(fake_post_data, db_session) -> Post:
     posts_repository = PostsRepository(db_session=db_session)
 
     _post: Post = posts_repository.create_post(

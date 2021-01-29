@@ -18,7 +18,6 @@ def _set_logger():
     _logger = logger
 
     _format: str = "{extra[func]} {extra[returns]} {time} {level} {message}"
-    # _format: str = "{extra[task_id]} {extra[func]} {extra[returns]} {time} {level} {message}"
     _logger.add(
         sys.stderr,
         format=_format,

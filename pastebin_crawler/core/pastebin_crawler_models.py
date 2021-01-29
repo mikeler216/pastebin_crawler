@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import create_engine, Column, INTEGER, VARCHAR, TEXT, TIMESTAMP
 from sqlalchemy.orm import sessionmaker
 
@@ -27,9 +29,30 @@ class Post(Base):
     post_text = Column(TEXT(), nullable=False)
     post_date = Column(TIMESTAMP())
     title = Column(VARCHAR(250), nullable=False)
+    created_date = Column(TIMESTAMP, default=datetime.utcnow())
+    updated_at = Column(
+        TIMESTAMP, default=datetime.utcnow(), onupdate=datetime.utcnow()
+    )
 
 
-def create_deals_table(engine) -> None:
+def create_tables(engine) -> None:
     """"""
     Base.metadata.create_all(engine)
     return None
+
+
+def create_tables_for_demo_or_test():
+    _is_db_ready = False
+    _max_tries = 60
+    _tries = 0
+    while not _is_db_ready:
+        _tries += 1
+        try:
+            engine.connect()
+            create_tables(engine)
+        except Exception:
+            if _tries == _max_tries:
+                raise TimeoutError("error starting DB")
+        else:
+            _is_db_ready = True
+            return

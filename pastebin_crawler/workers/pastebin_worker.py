@@ -4,6 +4,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
+from pastebin_crawler.helpers import remove_beginning_slash_from_str
 from pastebin_crawler.helpers.logger import info_logging
 from pastebin_crawler.posts_commponent.posts_component import PostsComponent
 from pastebin_crawler.services.paste_bin_post_service import (
@@ -12,6 +13,7 @@ from pastebin_crawler.services.paste_bin_post_service import (
 from pastebin_crawler.services.pastebin_archive_service import (
     PasteBinArchiveService,
 )
+from pastebin_crawler.settings import background_scheduler
 from pastebin_crawler.workers import PasteBinWorkerBase
 
 
@@ -30,7 +32,7 @@ class PasteBinWorker(PasteBinWorkerBase):
         """
 
         if not self.posts_component.get_post_by_pastebin_id(
-            pastebin_id=post_url[1:]
+            pastebin_id=remove_beginning_slash_from_str(post_url)
         ):
             pastebin_post_service = PasteBinPostService(resource_url=post_url)
             self.posts_component.create_post(
@@ -46,18 +48,16 @@ class PasteBinWorker(PasteBinWorkerBase):
         return None
 
     @info_logging
+    # @background_scheduler.scheduled_job('interval', id='pastebin', seconds=15)
     def run(self) -> None:
-        with self._logger.logger.contextualize(task_id=str(uuid.uuid4())):
-            _post_urls = self.pastebin_archive_service.get_latest_posts_urls()
-            with ThreadPoolExecutor(max_workers=10) as executor:
-                for _post in _post_urls:
-                    try:
-                        _res = executor.submit(self._handle_post, _post)
-                        res = _res.result()
-                        self._logger.info(func="run", message=res)
+        _post_urls = self.pastebin_archive_service.get_latest_posts_urls()
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            for _post in _post_urls:
+                try:
+                    _res = executor.submit(self._handle_post, _post)
+                    res = _res.result()
+                    self._logger.info(func="run", message=res)
 
-                    except Exception as e:
-                        self._logger.error(
-                            func=f"{e.__traceback__}", exception=e
-                        )
+                except Exception as e:
+                    self._logger.error(func=f"{e.__traceback__}", exception=e)
         return None

@@ -8,6 +8,12 @@ def remove_trailing_slash_by_delimiter(text: str, delimiter: str) -> str:
     return "\n".join([_text.strip() for _text in text.split(delimiter)])
 
 
+def remove_beginning_slash_from_str(input_string: str) -> str:
+    if input_string.startswith("/"):
+        return input_string[1:]
+    return input_string
+
+
 class Singleton(type):
     _instances = {}
 

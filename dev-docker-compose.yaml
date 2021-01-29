@@ -3,10 +3,10 @@ version: '3.7'
 services:
   web_crawler:
     build:
-      dockerfile: Dockerfile
+      dockerfile: dev-Dockerfile
       context: .
     environment:
-      ENGINE: postgresql+pg8000
+      ENGINE: "postgresql+pg8000"
       DB_USER_NAME: DB_USER
       DB_PASSWORD: DB_PASSWORD
       DB_HOST: postgres
