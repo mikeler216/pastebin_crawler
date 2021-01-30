@@ -47,7 +47,7 @@ def fake_post_data() -> FakePostData:
         fake_author=faker.name(),
         fake_post_date=faker.date_time(),
         fake_post_text="\n".join(
-            [faker.text(max_nb_chars=160) for _ in range(20)]
+            faker.text(max_nb_chars=160) for _ in range(20)
         ),
         fake_title=faker.company(),
         fake_pastebin_id=uuid.uuid4().hex[:5],
