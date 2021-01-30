@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, Query, load_only
 
 from pastebin_crawler.core.pastebin_crawler_models import Post
 from pastebin_crawler.repository import RepositoryBase
@@ -45,14 +45,20 @@ class PostsRepository(RepositoryBase):
             model=_post, commit=commit, flush=flush
         )
 
-    def get_post_by_pastebin_id(self, pastebin_id: str) -> Optional[Post]:
+    def get_post_by_pastebin_id(
+        self, pastebin_id: str, posts_only: List[str] = None
+    ) -> Optional[Post]:
         """
 
+        :param posts_only:
         :param pastebin_id:
         :return:
         """
-        return (
-            self.db_session.query(Post)
-            .filter(Post.pastebin_id == pastebin_id)
-            .one_or_none()
+        _query: Query = self.db_session.query(Post).filter(
+            Post.pastebin_id == pastebin_id
         )
+
+        if posts_only:
+            _query = _query.options(load_only(*posts_only))
+
+        return _query.one_or_none()

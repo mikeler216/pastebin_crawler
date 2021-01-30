@@ -5,6 +5,7 @@ from typing import Generator, Iterator, List
 
 from bs4 import BeautifulSoup
 
+from pastebin_crawler.helpers.logger import info_logging
 from pastebin_crawler.services import BaseCrawlerService
 
 
@@ -16,6 +17,7 @@ class PasteBinArchiveService(BaseCrawlerService):
             base_url="https://pastebin.com", resource_url="archive"
         )
 
+    @info_logging
     def get_latest_posts_urls(self) -> List[str]:
         """
 

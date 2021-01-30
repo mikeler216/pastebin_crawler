@@ -4,6 +4,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
+from pastebin_crawler.core.pastebin_crawler_models import Post
 from pastebin_crawler.helpers import remove_beginning_slash_from_str
 from pastebin_crawler.helpers.logger import info_logging
 from pastebin_crawler.posts_commponent.posts_component import PostsComponent
@@ -32,7 +33,8 @@ class PasteBinWorker(PasteBinWorkerBase):
         """
 
         if not self.posts_component.get_post_by_pastebin_id(
-            pastebin_id=remove_beginning_slash_from_str(post_url)
+            pastebin_id=remove_beginning_slash_from_str(post_url),
+            posts_only=[Post.pastebin_id.key],
         ):
             pastebin_post_service = PasteBinPostService(resource_url=post_url)
             self.posts_component.create_post(
@@ -45,10 +47,10 @@ class PasteBinWorker(PasteBinWorkerBase):
                 flush=False,
                 commit=True,
             )
+            self.db_session.close()
         return None
 
     @info_logging
-    # @background_scheduler.scheduled_job('interval', id='pastebin', seconds=15)
     def run(self) -> None:
         _post_urls = self.pastebin_archive_service.get_latest_posts_urls()
         with ThreadPoolExecutor(max_workers=10) as executor:
