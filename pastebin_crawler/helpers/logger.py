@@ -17,12 +17,16 @@ def _set_logger():
     """
     _logger = logger
 
-    _format: str = "{extra[func]} {extra[returns]} {time} {level} {message}"
+    _format: str = (
+        "FUNC: {extra[func]} | "
+        "EXTRA {extra[returns]} |{time} {level} Message: {message}"
+    )
     _logger.add(
         sys.stderr,
         format=_format,
         level=f"{config.DEBUG_LEVEL}",
         enqueue=False,
+        colorize=True,
     )
 
     return _logger

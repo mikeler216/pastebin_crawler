@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from sqlalchemy.orm import Session
 
@@ -20,14 +20,17 @@ class PostsComponent(BaseComponent):
         super(PostsComponent, self).__init__(db_session=db_session)
 
     @info_logging
-    def get_post_by_pastebin_id(self, pastebin_id: str) -> Optional[Post]:
+    def get_post_by_pastebin_id(
+        self, pastebin_id: str, posts_only: List[str] = None
+    ) -> Optional[Post]:
         """
 
+        :param posts_only:
         :param pastebin_id:
         :return:
         """
         return self.posts_repository.get_post_by_pastebin_id(
-            pastebin_id=pastebin_id
+            pastebin_id=pastebin_id, posts_only=posts_only
         )
 
     @info_logging
@@ -84,6 +87,7 @@ class PostsComponent(BaseComponent):
         )
 
     @staticmethod
+    @debug_logging
     def remove_trailing_spaces_from_post(post_text: str) -> str:
         """
 
