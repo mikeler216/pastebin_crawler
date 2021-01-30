@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from sqlalchemy import create_engine, Column, INTEGER, VARCHAR, TEXT, TIMESTAMP
+from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 from sqlalchemy.orm import sessionmaker
 
 from pastebin_crawler.settings.config import Config
-from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 
 config: Config = Config()
 engine = create_engine(

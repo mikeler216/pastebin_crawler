@@ -1,4 +1,3 @@
-import uuid
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
@@ -14,7 +13,6 @@ from pastebin_crawler.services.paste_bin_post_service import (
 from pastebin_crawler.services.pastebin_archive_service import (
     PasteBinArchiveService,
 )
-from pastebin_crawler.settings import background_scheduler
 from pastebin_crawler.workers import PasteBinWorkerBase
 
 
