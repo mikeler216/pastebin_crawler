@@ -29,10 +29,10 @@ class PasteBinArchiveService(BaseCrawlerService):
         for i in html_parser.find("div", {"class", "archive-table"}).find_all(
             "a"
         ):
-            _url = i.attrs["href"]
-            if "archive" in _url:
-                continue
             try:
+                _url = i.attrs["href"]
+                if "archive" in _url:
+                    continue
                 _urls.append(_url)
             except (AttributeError, KeyError) as e:
                 self._logger.error(exception=e, func="get_latest_posts_urls")

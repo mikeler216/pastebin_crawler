@@ -8,7 +8,7 @@ from pastebin_crawler.helpers import (
     remove_trailing_slash_by_delimiter,
     remove_beginning_slash_from_str,
 )
-from pastebin_crawler.helpers.constans import ValuesToNormalize
+from pastebin_crawler.helpers.constants import ValuesToNormalize
 from pastebin_crawler.helpers.exceptions_helper import PostExistsError
 from pastebin_crawler.helpers.logger import info_logging, debug_logging
 from pastebin_crawler.helpers.schemas import PostSchemaBase

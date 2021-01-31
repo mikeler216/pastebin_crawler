@@ -7,8 +7,8 @@ from typing import Optional
 from bs4 import BeautifulSoup
 import dateutil.parser
 
-from pastebin_crawler.helpers.constans import Urls, PostDivName
-from pastebin_crawler.helpers.schemas import PostSchemaBase
+from pastebin_crawler.helpers import remove_beginning_slash_from_str
+from pastebin_crawler.helpers.constants import Urls, PostDivName
 from pastebin_crawler.services import BaseCrawlerService
 
 
@@ -39,8 +39,7 @@ class PasteBinPostService(BaseCrawlerService):
 
         :return:
         """
-        if self._resource_url.startswith("/"):
-            return self._resource_url[1:]
+        return remove_beginning_slash_from_str(self._resource_url)
 
     @property
     def author(self) -> str:
